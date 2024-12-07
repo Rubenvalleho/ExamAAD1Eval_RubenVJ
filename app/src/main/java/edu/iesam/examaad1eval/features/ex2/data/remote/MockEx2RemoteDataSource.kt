@@ -2,7 +2,9 @@ package edu.iesam.examaad1eval.features.ex2.data.remote
 
 import edu.iesam.examaad1eval.features.ex2.domain.Game
 import edu.iesam.examaad1eval.features.ex2.domain.Player
+import org.koin.core.annotation.Single
 
+@Single
 class MockEx2RemoteDataSource {
 
     fun getGames(): List<Game>{

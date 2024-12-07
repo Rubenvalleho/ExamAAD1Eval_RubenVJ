@@ -11,6 +11,6 @@ const val GAME_TABLE = "game"
 data class GameEntity(
     @PrimaryKey @ColumnInfo(name = "id") val id : String,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "player") val player: Player
+    @ColumnInfo(name = "players") val player: List<Player>
 ) {
 }
