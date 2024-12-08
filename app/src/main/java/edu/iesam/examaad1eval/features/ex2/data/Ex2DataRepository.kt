@@ -11,15 +11,22 @@ class Ex2DataRepository(
     private val localData: GameLocalDataBase,
     private val remoteData: MockEx2RemoteDataSource
 ) : Ex2Repository {
-        suspend override fun getGames(): List<Game> {
-        val gamesFromLocal = localData.getAllGames()
-        if (gamesFromLocal.isEmpty()) {
-            val gamesFromRemote = remoteData.getGames()
-            localData.saveGames(gamesFromRemote)
-            return gamesFromRemote
-        } else {
-            return gamesFromLocal
+
+    companion object {
+        private const val MAX_CACHE_GAMES = 5
+    }
+
+        override suspend fun getGames(): List<Game> {
+        val cachedGames = localData.getAllGames().take(MAX_CACHE_GAMES)
+        val remoteGames = remoteData.getGames()
+        val allGames = (cachedGames + remoteGames).distinctBy {
+            it.id
         }
+
+        val updateCache = allGames.take(MAX_CACHE_GAMES)
+        localData.saveGames(updateCache)
+
+        return allGames
     }
 
 }
